@@ -12,7 +12,6 @@ pipeline{
             steps{
                 sh 'java --version'
                 sh 'mvn --version'
-                sh 'mvn clean install -DskipTests'
                 sh 'mvn clean package -DskipTests'
             }
         }
@@ -21,7 +20,6 @@ pipeline{
             steps{
                 withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/'){
                     sh 'docker build -t truongcongly/maven-jenkins-api .'
-                    sh 'docker push truongcongly/maven-jenkins-api'
                 }
             }
         }
@@ -38,6 +36,8 @@ pipeline{
                         }
                 }
                 sh 'docker network create dev || echo "this network existed"'
+                sh 'docker stop truongcongly-mysql || echo "this container does not exist" '
+                sh 'echo y | docker container prune'
 
                 sh 'docker run --name truongcongly-mysql --network dev -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN_PSW} -e MYSQL_DATABASE=maven_jenkins_api -d mysql:8.0'
             }
@@ -45,7 +45,6 @@ pipeline{
 
         stage('Deploy Application Spring Boot'){
             steps{
-                sh 'docker pull truongcongly/maven-jenkins-api'
                 sh 'docker stop truongcongly/maven-jenkins-api || echo "this container does not exist" '
                 sh 'echo y | docker container prune '
 
