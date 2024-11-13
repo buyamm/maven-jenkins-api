@@ -1,7 +1,9 @@
 pipeline{
     agent any
 
-   
+    tools{
+        maven 'my-maven'
+    }
 
     environment{
         MYSQL_ROOT_LOGIN = credentials('mysql-root-login')
@@ -10,6 +12,7 @@ pipeline{
     stages{
         stage('Build with Maven'){
             steps{
+                sh 'mvn --version'
                 sh 'mvn clean package -DskipTests'
             }
         }
