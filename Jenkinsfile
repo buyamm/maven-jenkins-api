@@ -12,6 +12,7 @@ pipeline{
     stages{
         stage('Build with Maven'){
             steps{
+                sh 'java --version'
                 sh 'mvn --version'
                 sh 'mvn clean package -DskipTests'
             }
