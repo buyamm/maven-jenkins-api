@@ -49,7 +49,7 @@ pipeline{
                 sh 'docker stop truongcongly/maven-jenkins-api || echo "this container does not exist" '
                 sh 'echo y | docker container prune '
 
-                sh 'docker run -d --name truongcongly/maven-jenkins-api -p 8081:8081 --network dev truongcongly/maven-jenkins-api'
+                sh 'docker run -d --name truongcongly-maven-jenkins-api -p 8081:8081 --network dev truongcongly/maven-jenkins-api'
             }
         }
     }
