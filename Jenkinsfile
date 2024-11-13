@@ -19,7 +19,7 @@ pipeline{
 
         stage('Packaging and Pushing image'){
             steps{
-                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://registry.hub.docker.com'){
+                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/'){
                     sh 'docker build -t truongcongly/maven-jenkins-api .'
                     sh 'docker push truongcongly/maven-jenkins-api'
                 }
