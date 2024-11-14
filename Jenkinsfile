@@ -1,8 +1,6 @@
 pipeline{
     agent any
-
-  
-
+    
     environment{
         MYSQL_ROOT_LOGIN = credentials('mysql-root-login')
     }
@@ -39,7 +37,9 @@ pipeline{
                 sh 'docker stop truongcongly-mysql || echo "this container does not exist" '
                 sh 'echo y | docker container prune'
 
-                sh 'docker run --name truongcongly-mysql --network dev -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN_PSW} -e MYSQL_DATABASE=maven_jenkins_api -d mysql:8.0'
+                sh 'sleep 50'
+                sh 'docker run --name truongcongly-mysql --network dev -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN_PSW} -e MYSQL_DATABASE=maven_jenkins_api -p 3306:3306 -d mysql:8.0'
+                // sh 'docker exec truongcongly-mysql mysql -u root -p${MYSQL_ROOT_LOGIN_PSW} -e "CREATE DATABASE IF NOT EXISTS maven_jenkins_api"'
             }
         }
 
