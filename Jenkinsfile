@@ -10,6 +10,7 @@ pipeline{
             steps{
                 sh 'java --version'
                 sh 'mvn --version'
+                echo "TruongCongly - xinchao"
                 sh 'mvn clean package -DskipTests'
             }
         }
