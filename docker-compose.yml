@@ -1,0 +1,42 @@
+version: "3"
+name: maven-jenkins-api
+
+services:
+  app:
+    container_name: maven-jenkins-api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: truongcongly/maven-jenkins-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - java-app
+
+  mysql:
+    container_name: truongcongly-mysql
+    image: "mysql:8.0"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: maven_jenkins_api
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3306"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    volumes:
+      - truongcongly-mysql-data:/var/lib/mysql
+    networks:
+      - java-app
+
+volumes:
+  truongcongly-mysql-data:
+networks:
+  java-app:
+    name: java-app

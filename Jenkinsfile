@@ -18,6 +18,7 @@ pipeline{
             steps{
                 withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/'){
                     sh 'docker build -t truongcongly/maven-jenkins-api .'
+                    sh 'docker push truongcongly/maven-jenkins-api'
                 }
             }
         }
@@ -38,13 +39,13 @@ pipeline{
                 sh 'echo y | docker container prune'
 
                 sh 'sleep 50'
-                sh 'docker run --name truongcongly-mysql --network dev -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN_PSW} -e MYSQL_DATABASE=maven_jenkins_api -p 3306:3306 -d mysql:8.0'
-                // sh 'docker exec truongcongly-mysql mysql -u root -p${MYSQL_ROOT_LOGIN_PSW} -e "CREATE DATABASE IF NOT EXISTS maven_jenkins_api"'
+                sh 'docker run --name truongcongly-mysql --network dev -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN_PSW} -e MYSQL_DATABASE=maven_jenkins_api -p 3306:3306 -d mysql:8.0'        
             }
         }
 
         stage('Deploy Application Spring Boot'){
             steps{
+                sh 'docker image pull truongcongly/maven-jenkins-api'
                 sh 'docker stop truongcongly/maven-jenkins-api || echo "this container does not exist" '
                 sh 'echo y | docker container prune '
 
@@ -59,6 +60,7 @@ pipeline{
         }
 
         success{
+            echo "Done deploy! - By TruongCongLy"
             echo 'Deploy successful - by TruongCongLy'
         }
 
